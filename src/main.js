@@ -9,7 +9,9 @@ const setCardFlag = flag => {
     const colors = {
         visa: ['#436D99', '#2D57F2'],
         mastercard: ['#DF6F29', '#C69347'],
-        default: ['black', 'grey']
+        american: ['#6DA18A', '#44866A'],
+        hipercard: ['#B71517', '#B60F0C'],
+        default: ['white', 'grey']
     }
 
     creditCardColor01.setAttribute('fill', colors[flag][0])
@@ -58,7 +60,16 @@ const cardNumberPattern = {
             cardType: 'mastercard',
             regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/
         },
-        
+        {
+            mask: '0000 0000 0000 0000',
+            cardType: 'american',
+            regex: /^3[47]\d{0,13}/
+        },
+        {
+            mask: '0000 0000 0000 0000',
+            cardType: 'hipercard',
+            regex: /(^6062 82|^3841(?:[046]{0,1}))\d{0,12}/
+        },
         {
             mask: '0000 0000 0000 0000',
             cardType: 'default',
@@ -68,7 +79,7 @@ const cardNumberPattern = {
     dispatch: function(appended, dynamicMasked) {
         const number = (dynamicMasked.value + appended).replace(/\D/g, ' ')
         const foundMask = dynamicMasked.compiledMasks.find(item => number.match(item.regex))
-
+        console.log(foundMask)
         setCardFlag(foundMask.cardType)
 
         return foundMask
